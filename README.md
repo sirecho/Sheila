@@ -1,2 +1,2 @@
 # Sheila
-A chess playing agent
+A chess playing agent written in C++
