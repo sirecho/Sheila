@@ -9,12 +9,20 @@
 #include <vector>
 #include "pieces.h"
 
-Piece::Piece(Side side, int value) {
+Piece::Piece(Side side, int value, Position position) {
 	this->side = side;
 	this->value = value;
+	this->position = position;
+	this->c = c;
 }
 
-void Piece::move(Position to) {
+void Piece::move(Board *board, Position to) {
+
+	if (board->getPieceAt(to) != NULL) {
+		board->capturePiece(to);
+	}
+
+	board->movePiece(position, to);
 	position = to;
 }
 
@@ -41,9 +49,11 @@ std::vector<Position> Piece::getLegalManhattanMoves(Board *board) {
 	// Find possible moves
 	for (int k=0; k<4; k++) {
 		for (int i=start[k]; i<end[k]; i++) {
-			Position newPos(position.getLetter(), i);
-			Piece *piece = board->getPieceAt(newPos);
+			Position newPos = i%2 ? Position(i, position.getLetter()) : Position(position.getNumber(), i);
 
+			if (board->isOutOfBounds(newPos)) break;
+
+			Piece *piece = board->getPieceAt(newPos);
 
 			if (piece == NULL) {
 				moves.push_back(newPos);
@@ -70,7 +80,7 @@ std::vector<Position> Piece::getLegalDiagonalMoves(Board *board) {
 	// W   Z
 
 	Position posNE = position.stepNorthEast();
-	for (int i=2; !board->isOutOfBounds(posNE); i++) {
+	while (!board->isOutOfBounds(posNE)) {
 
 		Piece *piece = board->getPieceAt(posNE);
 		if (piece == NULL) {
@@ -83,11 +93,11 @@ std::vector<Position> Piece::getLegalDiagonalMoves(Board *board) {
 			}
 			break;
 		}
-		posNE = posNE.stepNorthEast(i);
+		posNE = posNE.stepNorthEast();
 	}
 
 	Position posSE = position.stepSouthEast();
-	for (int i=2; !board->isOutOfBounds(posSE); i++) {
+	while (!board->isOutOfBounds(posSE)) {
 
 		Piece *piece = board->getPieceAt(posSE);
 		if (piece == NULL) {
@@ -100,11 +110,11 @@ std::vector<Position> Piece::getLegalDiagonalMoves(Board *board) {
 			}
 			break;
 		}
-		posSE = posSE.stepSouthEast(i);
+		posSE = posSE.stepSouthEast();
 	}
 
 	Position posNW = position.stepNorthWest();
-	for (int i=2; !board->isOutOfBounds(posNW); i++) {
+	while (!board->isOutOfBounds(posNW)) {
 
 		Piece *piece = board->getPieceAt(posNW);
 		if (piece == NULL) {
@@ -117,11 +127,11 @@ std::vector<Position> Piece::getLegalDiagonalMoves(Board *board) {
 			}
 			break;
 		}
-		posNW = posNW.stepNorthWest(i);
+		posNW = posNW.stepNorthWest();
 	}
 
 	Position posSW = position.stepSouthWest();
-	for (int i=2; !board->isOutOfBounds(posSW); i++) {
+	while (!board->isOutOfBounds(posSW)) {
 
 		Piece *piece = board->getPieceAt(posSW);
 		if (piece == NULL) {
@@ -134,15 +144,10 @@ std::vector<Position> Piece::getLegalDiagonalMoves(Board *board) {
 			}
 			break;
 		}
-		posSW = posSW.stepSouthWest(i);
+		posSW = posSW.stepSouthWest();
 	}
 
 	return moves;
-}
-
-
-Pawn::Pawn(Side side, int value) : Piece(side, value) {
-	enPassant = false;
 }
 
 std::vector<Position> Pawn::getLegalMoves(Board *board) {
@@ -157,19 +162,20 @@ std::vector<Position> Pawn::getLegalMoves(Board *board) {
 	Position squareAPosition = this->side == WHITE ? position.stepNorthWest() : position.stepSouthEast();
 	Position squareBPosition = this->side == WHITE ? position.stepNorth() : position.stepSouth();
 	Position squareCPosition = this->side == WHITE ? position.stepNorthEast() : position.stepSouthWest();
+
 	Position squareXPosition = this->side == WHITE ? position.stepWest() : position.stepEast();
 	Position squareYPosition = this->side == WHITE ? position.stepEast() : position.stepWest();
 
 	// May advance to B if not blocked by another piece
 	Piece *squareBPiece = board->getPieceAt(squareBPosition);
-	if (squareBPiece == NULL) {
+	if (!board->isOutOfBounds(squareBPosition) && squareBPiece == NULL) {
 		moves.push_back(squareBPosition);
 	}
 
 	// May advance to D if this is the first move
-	if (this->side == WHITE && position.getNumber() == WHITE_PAWN_ROW) {
+	if (this->side == WHITE && position.getNumber() == WHITE_PAWN_ROW && board->getPieceAt(position.stepNorth(2)) == NULL && squareBPiece == NULL) {
 		moves.push_back(position.stepNorth().stepNorth());
-	} else if (this->side == BLACK && position.getNumber() == BLACK_PAWN_ROW) {
+	} else if (this->side == BLACK && position.getNumber() == BLACK_PAWN_ROW && board->getPieceAt(position.stepSouth(2)) == NULL && squareBPiece == NULL) {
 		moves.push_back(position.stepSouth().stepSouth());
 	}
 
@@ -202,7 +208,6 @@ std::vector<Position> Pawn::getLegalMoves(Board *board) {
 }
 
 void Pawn::move(Board *board, Position to) {
-	Piece::move(to);
 	Position capture = to;
 
 	// Handle capture
@@ -247,16 +252,16 @@ std::vector<Position> Knight::getLegalMoves(Board *board) {
 	};
 
 	for (int k=0; k<4; k++) {
-		Position p1(position.getLetter()+letters[k], position.getNumber()+numbers[k]);
+		Position p1(position.getNumber()+numbers[k], position.getLetter()+letters[k]);
 		Piece *a = board->getPieceAt(p1);
-		Position p2(position.getLetter()+letters[k], position.getNumber()-numbers[k]);
+		Position p2(position.getNumber()-numbers[k], position.getLetter()+letters[k]);
 		Piece *b = board->getPieceAt(p2);
 
 		if (!board->isOutOfBounds(p1) && (a == NULL || a->getSide() != side)) {
 			moves.push_back(p1);
 		}
 
-		if (!board->isOutOfBounds(p1) && (b == NULL || b->getSide() != side)) {
+		if (!board->isOutOfBounds(p2) && (b == NULL || b->getSide() != side)) {
 			moves.push_back(p2);
 		}
 	}
@@ -298,6 +303,8 @@ std::vector<Position> King::getLegalMoves(Board *board) {
 	};
 
 	for (int i=0; i<8; i++) {
+		if (board->isOutOfBounds(allDirections[i])) continue;
+
 		Piece *piece = board->getPieceAt(allDirections[i]);
 
 		if (piece == NULL || piece->getSide() != side) {

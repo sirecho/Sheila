@@ -8,6 +8,8 @@
 #ifndef BOARD_H_
 #define BOARD_H_
 
+#include "side.h"
+
 class Piece;
 
 const int WHITE_OFFICER_ROW = 0;
@@ -26,7 +28,7 @@ private:
 public:
 
 	Position() : numberPosition(0), letterPosition(0) {}
-	Position(int x, int y);
+	Position(int row, int col);
 
 	int getNumber() {return numberPosition;}
 	int getLetter() {return letterPosition;}
@@ -45,12 +47,17 @@ class Board {
 private:
 	static const int height = 8;
 	static const int width = 8;
-	Piece *board[height][width];
+	Piece ***board;
 
 public:
 	Board();
 
-	void setBoard(Board *newBoard) {board = newBoard;}
+	void setBoard(Piece ***newBoard) {board = newBoard;}
+
+	std::vector<Piece*> get();
+	void set(std::vector<Piece*> pieces);
+	void setSquare(Position pos, Piece* piece);
+	void clear();
 
 	int evaluate();
 
@@ -58,12 +65,15 @@ public:
 	int getWidth(){return width;}
 	bool isOutOfBounds(Position position);
 
-	Piece *getWhitePieces();
-	Piece *getBlackPieces();
+	std::vector<Piece*> getPiecesBySide(Side side);
+	std::vector<Piece*> getWhitePieces();
+	std::vector<Piece*> getBlackPieces();
 	Piece *getPieceAt(Position position);
 
 	void capturePiece(Position position);
 	void movePiece(Position from, Position to);
+
+	void draw();
 };
 
 
