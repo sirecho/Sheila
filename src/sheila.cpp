@@ -14,7 +14,7 @@
 
 using namespace std;
 
-int miniMax(Board *board, int depth, bool maxPlayer) {
+int miniMax(Board *board, int depth, int alpha, int beta, bool maxPlayer) {
 	if (depth == 0) return board->evaluate();
 
 	vector<Piece*> allPieces = board->get();
@@ -35,14 +35,18 @@ int miniMax(Board *board, int depth, bool maxPlayer) {
 				Piece* capture = board->getPieceAt(newPosition);
 
 		    	p->move(board, *jt);
-		    	int value = miniMax(board, depth-1, false);
+		    	int value = miniMax(board, depth-1, alpha, beta, false);
 		    	bestValue = bestValue < value ? value : bestValue;
+		    	alpha = alpha < value ? value : alpha;
 
 		    	// Revert to previous state
 		    	p->setPosition(prevPosition);
 		    	board->setSquare(prevPosition, p);
 		    	board->setSquare(newPosition, capture);
+
+		    	if (beta <= alpha) break;
 		    }
+		    if (beta <= alpha) break;
 		}
 
 		return bestValue;
@@ -62,14 +66,19 @@ int miniMax(Board *board, int depth, bool maxPlayer) {
 				Piece* capture = board->getPieceAt(newPosition);
 
 		    	p->move(board, *jt);
-		    	int value = miniMax(board, depth-1, true);
+		    	int value = miniMax(board, depth-1, alpha, beta, true);
 		    	bestValue = bestValue > value ? value : bestValue;
+		    	beta = beta > value ? value : beta;
 
 		    	// Revert to previous state
 		    	p->setPosition(prevPosition);
 		    	board->setSquare(prevPosition, p);
 		    	board->setSquare(newPosition, capture);
+
+		    	if (beta <= alpha) break;
 		    }
+
+		    if (beta <= alpha) break;
 		}
 
 		return bestValue;
@@ -96,7 +105,7 @@ void getNextMove(Board *board, bool maxPlayer, Piece **piece, Position **move) {
 				Piece* capture = board->getPieceAt(newPosition);
 
 		    	p->move(board, *jt);
-		    	int value = miniMax(board, 4, false);
+		    	int value = miniMax(board, 5, INT_MIN, INT_MAX, false);
 
 		    	if (value > bestValue) {
 		    		bestValue = value;
@@ -128,7 +137,7 @@ void getNextMove(Board *board, bool maxPlayer, Piece **piece, Position **move) {
 				Piece* capture = board->getPieceAt(newPosition);
 
 				p->move(board, *jt);
-		    	int value = miniMax(board, 4, true);
+		    	int value = miniMax(board, 5, INT_MIN, INT_MAX, true);
 
 		    	if (value < bestValue) {
 		    		bestValue = value;
@@ -156,7 +165,7 @@ int main() {
 	Piece **piece = new Piece*; *piece = NULL;
 	Position **move = new Position*; *move = NULL;
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 100; i++) {
 		getNextMove(&board, maxPlayer, piece, move);
 		cout << "Moves " << (char)('A'+(*piece)->getCol()) << (*piece)->getRow()+1 << " ";
 		(*piece)->move(&board, **move);

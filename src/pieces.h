@@ -20,7 +20,7 @@ protected:
 	char c;
 
 public:
-	Piece(Side side, int value, Position position);
+	Piece(Side side, Position position);
 	virtual ~Piece(){}
 
 	Side getSide() {return side;}
@@ -44,7 +44,7 @@ class Pawn: public Piece {
 private:
 	bool enPassant;
 public:
-	Pawn(Side side, int value, Position position) : Piece(side, value, position) { enPassant = false; c = side == WHITE ? 'P' : 'p'; }
+	Pawn(Side side, Position position) : Piece(side, position) { enPassant = false; c = side == WHITE ? 'P' : 'p'; value = 10; }
 	std::vector<Position> getLegalMoves(Board *board);
 	void move(Board *board, Position to);
 	bool canEnPassant() { return enPassant; }
@@ -52,33 +52,31 @@ public:
 
 class Rook: public Piece {
 public:
-	Rook(Side side, int value, Position position) : Piece(side, value, position) { c = side == WHITE ? 'R' : 'r'; }
+	Rook(Side side, Position position) : Piece(side, position) { c = side == WHITE ? 'R' : 'r'; value = 50; }
 	std::vector<Position> getLegalMoves(Board *board);
 };
 
 class Knight: public Piece {
 public:
-	Knight(Side side, int value, Position position) : Piece(side, value, position) { c = side == WHITE ? 'N' : 'n'; }
+	Knight(Side side, Position position) : Piece(side, position) { c = side == WHITE ? 'N' : 'n'; value = 30; }
 	std::vector<Position> getLegalMoves(Board *board);
 };
 
 class Bishop: public Piece {
 public:
-	Bishop(Side side, int value, Position position) : Piece(side, value, position) { c = side == WHITE ? 'B' : 'b'; }
+	Bishop(Side side, Position position) : Piece(side, position) { c = side == WHITE ? 'B' : 'b'; value = 30; }
 	std::vector<Position> getLegalMoves(Board *board);
 };
 
 class Queen: public Piece {
 public:
-	Queen(Side side, int value, Position position) : Piece(side, value, position) { c = side == WHITE ? 'Q' : 'q'; }
+	Queen(Side side, Position position) : Piece(side, position) { c = side == WHITE ? 'Q' : 'q'; value = 90; }
 	std::vector<Position> getLegalMoves(Board *board);
 };
 
 class King: public Piece {
 public:
-	King(Side side, int value, Position position) : Piece(side, value, position) {
-		c = side == WHITE ? 'K' : 'k';
-	}
+	King(Side side, Position position) : Piece(side, position) { c = side == WHITE ? 'K' : 'k'; value = 1000;	}
 	std::vector<Position> getLegalMoves(Board *board);
 };
 

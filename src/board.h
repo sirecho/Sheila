@@ -32,6 +32,7 @@ public:
 
 	int getNumber() {return numberPosition;}
 	int getLetter() {return letterPosition;}
+	int getValue()  { if (numberPosition <= 4 && numberPosition >= 3) return 10; return 0; }
 
 	Position stepNorth(int steps=1);
 	Position stepNorthEast(int steps=1);

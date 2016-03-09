@@ -9,9 +9,8 @@
 #include <vector>
 #include "pieces.h"
 
-Piece::Piece(Side side, int value, Position position) {
+Piece::Piece(Side side, Position position) {
 	this->side = side;
-	this->value = value;
 	this->position = position;
 	this->c = c;
 }
@@ -48,8 +47,8 @@ std::vector<Position> Piece::getLegalManhattanMoves(Board *board) {
 
 	// Find possible moves
 	for (int k=0; k<4; k++) {
-		for (int i=start[k]; i<end[k]; i++) {
-			Position newPos = i%2 ? Position(i, position.getLetter()) : Position(position.getNumber(), i);
+		for (int i=start[k]; k<2 ? i<end[k] : i>=end[k]; i = k<2 ? i+1 : i-1) {
+			Position newPos = k%2 ? Position(position.getNumber(), i) : Position(i, position.getLetter());
 
 			if (board->isOutOfBounds(newPos)) break;
 
@@ -58,6 +57,7 @@ std::vector<Position> Piece::getLegalManhattanMoves(Board *board) {
 			if (piece == NULL) {
 				moves.push_back(newPos);
 			}
+
 			// A piece is blocking the path:
 			else {
 				if (piece->side != side) {

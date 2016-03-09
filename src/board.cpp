@@ -55,42 +55,40 @@ Board::Board() {
 
 
 	// Initialize white pieces
-	board[0][0] = new Rook(WHITE, 5, Position(0,0));
-	board[0][1] = new Knight(WHITE, 3, Position(0,1));
-	board[0][2] = new Bishop(WHITE, 3, Position(0,2));
-	board[0][3] = new Queen(WHITE, 9, Position(0,3));
-	board[0][4] = new King(WHITE, 0, Position(0,4));
-	board[0][5] = new Bishop(WHITE, 3, Position(0,5));
-	board[0][6] = new Knight(WHITE, 3, Position(0,6));
-	board[0][7] = new Rook(WHITE, 5, Position(0,7));
-
-	board[1][0] = new Pawn(WHITE, 1, Position(1,0));
-	board[1][1] = new Pawn(WHITE, 1, Position(1,1));
-	board[1][2] = new Pawn(WHITE, 1, Position(1,2));
-	board[1][3] = new Pawn(WHITE, 1, Position(1,3));
-	board[1][4] = new Pawn(WHITE, 1, Position(1,4));
-	board[1][5] = new Pawn(WHITE, 1, Position(1,5));
-	board[1][6] = new Pawn(WHITE, 1, Position(1,6));
-	board[1][7] = new Pawn(WHITE, 1, Position(1,7));
+	board[0][0] = new Rook(WHITE, Position(0,0));
+	board[0][1] = new Knight(WHITE, Position(0,1));
+	board[0][2] = new Bishop(WHITE, Position(0,2));
+	board[0][3] = new Queen(WHITE, Position(0,3));
+	board[0][4] = new King(WHITE, Position(0,4));
+	board[0][5] = new Bishop(WHITE, Position(0,5));
+	board[0][6] = new Knight(WHITE, Position(0,6));
+	board[0][7] = new Rook(WHITE, Position(0,7));
+	board[1][0] = new Pawn(WHITE, Position(1,0));
+	board[1][1] = new Pawn(WHITE, Position(1,1));
+	board[1][2] = new Pawn(WHITE, Position(1,2));
+	board[1][3] = new Pawn(WHITE, Position(1,3));
+	board[1][4] = new Pawn(WHITE, Position(1,4));
+	board[1][5] = new Pawn(WHITE, Position(1,5));
+	board[1][6] = new Pawn(WHITE, Position(1,6));
+	board[1][7] = new Pawn(WHITE, Position(1,7));
 
 	// Initialize black pieces
-	board[7][0] = new Rook(BLACK, 5, Position(7,0));
-	board[7][1] = new Knight(BLACK, 3, Position(7,1));
-	board[7][2] = new Bishop(BLACK, 3, Position(7,2));
-	board[7][3] = new Queen(BLACK, 9, Position(7,3));
-	board[7][4] = new King(BLACK, 0, Position(7,4));
-	board[7][5] = new Bishop(BLACK, 3, Position(7,5));
-	board[7][6] = new Knight(BLACK, 3, Position(7,6));
-	board[7][7] = new Rook(BLACK, 5, Position(7,7));
-
-	board[6][0] = new Pawn(BLACK, 1, Position(6,0));
-	board[6][1] = new Pawn(BLACK, 1, Position(6,1));
-	board[6][2] = new Pawn(BLACK, 1, Position(6,2));
-	board[6][3] = new Pawn(BLACK, 1, Position(6,3));
-	board[6][4] = new Pawn(BLACK, 1, Position(6,4));
-	board[6][5] = new Pawn(BLACK, 1, Position(6,5));
-	board[6][6] = new Pawn(BLACK, 1, Position(6,6));
-	board[6][7] = new Pawn(BLACK, 1, Position(6,7));
+	board[7][0] = new Rook(BLACK, Position(7,0));
+	board[7][1] = new Knight(BLACK, Position(7,1));
+	board[7][2] = new Bishop(BLACK, Position(7,2));
+	board[7][3] = new Queen(BLACK, Position(7,3));
+	board[7][4] = new King(BLACK, Position(7,4));
+	board[7][5] = new Bishop(BLACK, Position(7,5));
+	board[7][6] = new Knight(BLACK, Position(7,6));
+	board[7][7] = new Rook(BLACK, Position(7,7));
+	board[6][0] = new Pawn(BLACK, Position(6,0));
+	board[6][1] = new Pawn(BLACK, Position(6,1));
+	board[6][2] = new Pawn(BLACK, Position(6,2));
+	board[6][3] = new Pawn(BLACK, Position(6,3));
+	board[6][4] = new Pawn(BLACK, Position(6,4));
+	board[6][5] = new Pawn(BLACK, Position(6,5));
+	board[6][6] = new Pawn(BLACK, Position(6,6));
+	board[6][7] = new Pawn(BLACK, Position(6,7));
 }
 
 void Board::clear() {
@@ -130,21 +128,22 @@ int Board::evaluate() {
 	int whiteSquarePoints = 0;
 	int blackSquarePoints = 0;
 
-
 	for (int i=0; i<height; i++) {
 		for (int j=0; j<width; j++) {
 			Piece *piece = board[i][j];
 			if (piece != NULL) {
 				if (piece->getSide() == WHITE) {
 					whitePiecePoints += piece->getValue();
+					whiteSquarePoints += piece->getPosition().getValue();
 				} else {
 					blackPiecePoints += piece->getValue();
+					blackSquarePoints += piece->getPosition().getValue();
 				}
 			}
 		}
 	}
 
-	return whitePiecePoints - blackPiecePoints;
+	return (whitePiecePoints - blackPiecePoints) + (whiteSquarePoints - blackSquarePoints);
 }
 
 bool Board::isOutOfBounds(Position position) {
@@ -209,5 +208,5 @@ void Board::draw() {
 		}
 		std::cout << std::endl;
 	}
-	std::cout << std::endl;
+	std::cout << "Value: " << evaluate() << std::endl;
 }
