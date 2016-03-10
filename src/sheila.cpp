@@ -105,7 +105,7 @@ void getNextMove(Board *board, bool maxPlayer, Piece **piece, Position **move) {
 				Piece* capture = board->getPieceAt(newPosition);
 
 		    	p->move(board, *jt);
-		    	int value = miniMax(board, 5, INT_MIN, INT_MAX, false);
+		    	int value = miniMax(board, 4, INT_MIN, INT_MAX, false);
 
 		    	if (value > bestValue) {
 		    		bestValue = value;
@@ -137,7 +137,7 @@ void getNextMove(Board *board, bool maxPlayer, Piece **piece, Position **move) {
 				Piece* capture = board->getPieceAt(newPosition);
 
 				p->move(board, *jt);
-		    	int value = miniMax(board, 5, INT_MIN, INT_MAX, true);
+		    	int value = miniMax(board, 4, INT_MIN, INT_MAX, true);
 
 		    	if (value < bestValue) {
 		    		bestValue = value;
@@ -161,9 +161,12 @@ int main() {
 
 	board.draw();
 
-	bool maxPlayer = true;
+	bool maxPlayer = false;
 	Piece **piece = new Piece*; *piece = NULL;
 	Position **move = new Position*; *move = NULL;
+
+	board.getPieceAt(Position(1,3))->move(&board, Position(3,3));
+	board.draw();
 
 	for (int i = 0; i < 100; i++) {
 		getNextMove(&board, maxPlayer, piece, move);
