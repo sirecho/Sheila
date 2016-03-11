@@ -196,17 +196,27 @@ void Board::movePiece(Position from, Position to) {
 }
 
 void Board::draw() {
-	std::cout << "  A B C D E F G H" << std::endl;
-	for (int i=0; i<height; i++) {
-		std::cout << i+1 << " ";
+
+	std::cout << "   ";
+	for (int j=0; j<width*4-1; j++) {
+		std::cout << "-";
+	}
+	std::cout << std::endl;
+
+	for (int i=height-1; i>=0; i--) {
+		std::cout << i+1 << " | ";
 		for (int j=0; j<width; j++) {
 			Piece* p = board[i][j];
 			if (p == NULL)
-				std::cout << "  ";
+				std::cout << "  | ";
 			else
-				std::cout << p->toChar() << " ";
+				std::cout << p->toChar() << " " << "|" << " ";
+		}
+		std::cout << std::endl << "   ";
+		for (int j=0; j<width*4-1; j++) {
+			std::cout << "-";
 		}
 		std::cout << std::endl;
 	}
-	std::cout << "Value: " << evaluate() << std::endl;
+	std::cout << "    A   B   C   D   E   F   G   H" << std::endl;
 }

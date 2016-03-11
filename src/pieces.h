@@ -38,6 +38,8 @@ public:
 	virtual void move(Board *board, Position to);
 
 	char toChar() { return c; }
+
+	bool operator<(const Piece &rhs) const { return value < rhs.value; }
 };
 
 class Pawn: public Piece {
