@@ -7,11 +7,7 @@
 //============================================================================
 
 #include <iostream>
-#include <cstdlib>
-#include <climits>
 #include <ctime>
-#include <iterator>
-#include <algorithm>
 #include "standardboard.h"
 #include "piece.h"
 #include "minimax.h"
@@ -51,36 +47,7 @@ void autoPlay(int moves) {
 	delete move;
 }
 
-void playerMove(Board *board) {
-
-    // TODO: Deprecated. Player cannot talk directly to the board.
-
-//	Position startMove, endMove;
-//
-//	do {
-//		std::string move;
-//		cout << "Enter move: ";
-//		getline(cin, move);
-//
-//		if (move.length() != 5) continue;
-//
-//		int firstCol = (int) move[0]-'a';
-//		int firstNum = (int) move[1]-'0'-1;
-//		int secondCol = (int) move[3]-'a';
-//		int secondNum = (int) move[4]-'0'-1;
-//
-//		startMove = Position(firstCol, firstNum);
-//		endMove = Position(secondCol, secondNum);
-//
-//	} while(board->isOutOfBounds(startMove) || board->isOutOfBounds(endMove));
-//
-//	board->pieceAt(startMove)->move(board, endMove);
-
-}
-
-//}
-
 int main() {
-	autoPlay(1);
+	autoPlay(100);
 	return 0;
 }
