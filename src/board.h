@@ -1,80 +1,58 @@
 /*
  * board.h
  *
- *  Created on: Dec 21, 2015
+ *  Created on: Jan 18, 2018
  *      Author: Eirik Skogstad
  */
 
 #ifndef BOARD_H_
 #define BOARD_H_
 
+#include <vector>
 #include "side.h"
 #include "position.h"
 
 class Piece;
 
-const int WHITE_OFFICER_ROW     =   0;
-const int WHITE_PAWN_ROW        =   1;
-const int WHITE_ENPASSANT_ROW   =   5;
-const int BLACK_OFFICER_ROW     =   7;
-const int BLACK_PAWN_ROW        =   6;
-const int BLACK_ENPASSANT_ROW   =   4;
-
-
-
 class Board {
 
   public:
-    Board();
 
     // Functions for placing and removing pieces on the board
-    void placeAllPieces(Piece ***newBoard) { board_ = newBoard; }
-    void placePieces(std::vector<Piece*> pieces);
-    void placePiece(Position pos, Piece* piece);
-    void clear();
+    virtual void placeAllPieces(Piece ***newBoard) = 0;
+    virtual void placePieces(std::vector<Piece*> pieces) = 0;
+    virtual void placePiece(Position pos, Piece* piece) = 0;
+    virtual void clear() = 0;
 
     // Functions for extracting pointers to pieces on the board
-    Piece *pieceAt(Position position);
-    std::vector<Piece*> pieces();
-    std::vector<Piece*> pieces(Side side);
-    std::vector<Piece*> whitePieces();
-    std::vector<Piece*> blackPieces();
+    virtual Piece *pieceAt(Position position) = 0;
+    virtual std::vector<Piece*> pieces() = 0;
+    virtual std::vector<Piece*> pieces(Side side) = 0;
+    virtual std::vector<Piece*> whitePieces() = 0;
+    virtual std::vector<Piece*> blackPieces() = 0;
 
     // Evaluate the current advantage for the white player.
     // In chess terms, this is the evaluation of the position boiled down to a
     // single numeric value.
     // A higher value signifies more advantage for white and vice versa.
-    int evaluate();
+    virtual int evaluate() = 0;
 
-    void capturePiece(Position position);
-    void movePiece(Position from, Position to);
+    virtual void capturePiece(Position position) = 0;
+    virtual void movePiece(Position from, Position to) = 0;
 
-    Position *getEnPassantPosition() { return 0; }
+    virtual Position* getEnPassantPosition() = 0;
 
     // Return a string representation of the current position
-    char* Describe();
+    virtual char* Describe() = 0;
 
     // TODO: This has no business here, should be moved to a Graphics/Console class.
-    void draw();
+    virtual void draw() = 0;
 
-    int width();
+    virtual int width() = 0;
 
-    bool isOutOfBounds(Position position);
-
-  private:
-    static const int height_ = 8;
-    static const int width_  = 8;
-    Piece ***board_;
-
-    bool white_can_castle_king = true;
-    bool white_can_castle_queen = true;
-    bool black_can_castle_king = true;
-    bool black_can_castle_queen = true;
-
-    Side next_to_move_ = WHITE;
-
-    //int height() { return height_; }
-    //int width()  { return width_; }
+    virtual bool isOutOfBounds(Position position) = 0;
+    virtual bool isWhitePawnRow(Position position) = 0;
+    virtual bool isBlackPawnRow(Position position) = 0;
 };
 
 #endif /* BOARD_H_ */

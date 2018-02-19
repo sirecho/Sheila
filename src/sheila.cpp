@@ -12,6 +12,7 @@
 #include <ctime>
 #include <iterator>
 #include <algorithm>
+#include "standardboard.h"
 #include "piece.h"
 #include "IMoveDecision.h"
 #include "MiniMax.h"
@@ -19,7 +20,7 @@
 using namespace std;
 
 void autoPlay(int moves) {
-	Board board;
+	StandardBoard board;
 	MiniMax moveDecision;
 
 	board.draw();
@@ -77,7 +78,7 @@ void playerMove(Board *board) {
 
 int main() {
 
-	Board board;
+	StandardBoard board;
 	board.draw();
 
 	bool maxPlayer = false;

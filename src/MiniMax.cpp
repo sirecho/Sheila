@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <climits>
+#include "board.h"
 #include "piece.h"
 #include "IMoveDecision.h"
 #include "MiniMax.h"

@@ -8,10 +8,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
+#include "standardboard.h"
 #include "piece.h"
 #include "position.h"
 
-Board::Board() {
+StandardBoard::StandardBoard() {
 
 	// Allocate memory for the board
 	board_ = new Piece**[height_];
@@ -55,7 +56,7 @@ Board::Board() {
     board_[6][7] = new Pawn    (BLACK, Position(7,6));
 }
 
-void Board::clear() {
+void StandardBoard::clear() {
 	for (int i = 0; i < height_; i++) {
 		for (int j = 0; j < width_; j++) {
 			board_[i][j] = NULL;
@@ -63,7 +64,7 @@ void Board::clear() {
 	}
 }
 
-std::vector<Piece*> Board::pieces() {
+std::vector<Piece*> StandardBoard::pieces() {
 	std::vector<Piece*> pieces;
 	for (int i = 0; i < height_; i++) {
 		for (int j = 0; j < width_; j++) {
@@ -75,18 +76,22 @@ std::vector<Piece*> Board::pieces() {
 	return pieces;
 }
 
-void Board::placePieces(std::vector<Piece*> pieces) {
+void StandardBoard::placeAllPieces(Piece ***newBoard) { 
+	board_ = newBoard; 
+}
+
+void StandardBoard::placePieces(std::vector<Piece*> pieces) {
 	for(std::vector<Piece*>::iterator it = pieces.begin(); it != pieces.end(); ++it) {
 		Piece *p = *it;
 		board_[p->position().number()][p->position().letter()] = p;
 	}
 }
 
-void Board::placePiece(Position pos, Piece* piece) {
+void StandardBoard::placePiece(Position pos, Piece* piece) {
 	board_[pos.number()][pos.letter()] = piece;
 }
 
-int Board::evaluate() {
+int StandardBoard::evaluate() {
 	int whitePiecePoints = 0;
 	int blackPiecePoints = 0;
 	int whiteSquarePoints = 0;
@@ -110,7 +115,7 @@ int Board::evaluate() {
 	return (whitePiecePoints - blackPiecePoints) + (whiteSquarePoints - blackSquarePoints);
 }
 
-bool Board::isOutOfBounds(Position position) {
+bool StandardBoard::isOutOfBounds(Position position) {
 	bool a = position.number() < height_;
 	bool b = position.letter() < width_;
 	bool c = position.number() >= 0;
@@ -118,7 +123,15 @@ bool Board::isOutOfBounds(Position position) {
 	return !( a && b && c && d );
 }
 
-std::vector<Piece*> Board::pieces(Side side) {
+bool StandardBoard::isWhitePawnRow(Position position) {
+	return position.number() == WHITE_PAWN_ROW;
+}
+
+bool StandardBoard::isBlackPawnRow(Position position) {
+	return position.number() == BLACK_PAWN_ROW;
+}
+
+std::vector<Piece*> StandardBoard::pieces(Side side) {
 
 	std::vector<Piece*> pieces;
 	for (int i=0; i<height_; i++) {
@@ -132,15 +145,15 @@ std::vector<Piece*> Board::pieces(Side side) {
 	return pieces;
 }
 
-std::vector<Piece*> Board::whitePieces() {
+std::vector<Piece*> StandardBoard::whitePieces() {
 	return pieces(WHITE);
 }
 
-std::vector<Piece*> Board::blackPieces() {
+std::vector<Piece*> StandardBoard::blackPieces() {
 	return pieces(BLACK);
 }
 
-Piece *Board::pieceAt(Position position) {
+Piece *StandardBoard::pieceAt(Position position) {
 	if (!isOutOfBounds(position))
 		return board_[position.number()][position.letter()];
 
@@ -148,11 +161,11 @@ Piece *Board::pieceAt(Position position) {
 }
 
 
-void Board::capturePiece(Position position) {
+void StandardBoard::capturePiece(Position position) {
 	board_[position.number()][position.letter()] = NULL;
 }
 
-void Board::movePiece(Position from, Position to) {
+void StandardBoard::movePiece(Position from, Position to) {
     // TODO: Check outofbounds
 	Piece *moved = board_[from.number()][from.letter()];
 	board_[from.number()][from.letter()] = NULL;
@@ -161,7 +174,11 @@ void Board::movePiece(Position from, Position to) {
 	next_to_move_ = next_to_move_ == WHITE ? BLACK : WHITE;
 }
 
-char* Board::Describe() {
+Position* StandardBoard::getEnPassantPosition() { 
+	return 0; 
+}
+
+char* StandardBoard::Describe() {
     char* epd_string = new char[128];
     int string_position = 0;
     char separator = '/';
@@ -215,7 +232,7 @@ char* Board::Describe() {
     return epd_string;
 }
 
-void Board::draw() {
+void StandardBoard::draw() {
 
 	std::cout << "   ";
 	for (int j=0; j<width_*4-1; j++) {
@@ -243,6 +260,6 @@ void Board::draw() {
 	std::cout << "\nThe EPD representation if this board is " << Describe() << std::endl;
 }
 
-int Board::width() {
+int StandardBoard::width() {
 	return width_;
 }
