@@ -8,7 +8,7 @@
 #include "piece.h"
 #include "movedecision.h"
 
-class MiniMax : public IMoveDecision {
+class MiniMax : public MoveDecision {
 	public:
 	MiniMax() {};
 	int miniMaxShort(Board *board, int depth, int alpha, int beta, bool maxPlayer);

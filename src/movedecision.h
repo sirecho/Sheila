@@ -1,18 +1,18 @@
 /*
- * IMoveDecision.h
+ * movedecision.h
  *
  *  Created on: Jan 18, 2018
  *      Author: Eirik Skogstad
  */
 
-#ifndef IMOVEDECISION_H_
-#define IMOVEDECISION_H_
+#ifndef MOVEDECISION_H_
+#define MOVEDECISION_H_
 
 #include "piece.h"
 
-class IMoveDecision {
+class MoveDecision {
 	public:
 	virtual void getNextMove(Board *board, bool maxPlayer, Piece **pieceToMove, Position **moveTo) = 0;
 };
 
-#endif /* IMOVEDECISION_H_ */
+#endif /* MOVEDECISION_H_ */
