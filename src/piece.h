@@ -11,6 +11,7 @@
 #include <vector>
 #include "board.h"
 #include "side.h"
+#include "position.h"
 
 class Piece {
   public:

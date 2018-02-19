@@ -42,7 +42,7 @@ std::vector<Position> Piece::manhattanMoves(Board *board) {
 
 
     int end[4] = {
-            board->height(),      // North
+            board->width(),      // North
             board->width(),       // East
             0,                    // South
             0                     // West

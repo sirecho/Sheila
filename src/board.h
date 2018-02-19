@@ -9,6 +9,7 @@
 #define BOARD_H_
 
 #include "side.h"
+#include "position.h"
 
 class Piece;
 
@@ -19,42 +20,9 @@ const int BLACK_OFFICER_ROW     =   7;
 const int BLACK_PAWN_ROW        =   6;
 const int BLACK_ENPASSANT_ROW   =   4;
 
-class Position {
-  public:
-    Position() : letter_(0), number_(0) {}
-    Position(int letter, int number);
 
-    bool operator==(const Position& other) const;
-
-    int letter() const { return letter_; }
-    int number() const { return number_; }
-    int value()  const { if (number_ <= 4 && number_ >= 3) return 10; return 0; }
-
-    // Functions for taking n=steps steps in a given direction.
-    // myPosition.stepNorth() will return the position at one step north of
-    // myPosition.
-    Position stepNorth     (int steps = 1);
-    Position stepNorthEast (int steps = 1);
-    Position stepNorthWest (int steps = 1);
-    Position stepSouth     (int steps = 1);
-    Position stepSouthEast (int steps = 1);
-    Position stepSouthWest (int steps = 1);
-    Position stepEast      (int steps = 1);
-    Position stepWest      (int steps = 1);
-
-  private:
-    int letter_;
-    int number_;
-};
 
 class Board {
-    friend class Piece;
-    friend class King;
-    friend class Queen;
-    friend class Bishop;
-    friend class Knight;
-    friend class Rook;
-    friend class Pawn;
 
   public:
     Board();
@@ -89,6 +57,10 @@ class Board {
     // TODO: This has no business here, should be moved to a Graphics/Console class.
     void draw();
 
+    int width();
+
+    bool isOutOfBounds(Position position);
+
   private:
     static const int height_ = 8;
     static const int width_  = 8;
@@ -101,9 +73,8 @@ class Board {
 
     Side next_to_move_ = WHITE;
 
-    int height() { return height_; }
-    int width()  { return width_; }
-    bool isOutOfBounds(Position position);
+    //int height() { return height_; }
+    //int width()  { return width_; }
 };
 
 #endif /* BOARD_H_ */
