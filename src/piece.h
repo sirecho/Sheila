@@ -9,8 +9,8 @@
 #define PIECE_H_
 
 #include <vector>
-#include "board.h"
 #include "side.h"
+#include "board.h"
 #include "position.h"
 
 class Piece {

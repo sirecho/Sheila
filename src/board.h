@@ -10,8 +10,8 @@
 
 #include <vector>
 #include "side.h"
-#include "position.h"
 
+class Position;
 class Piece;
 
 class Board {

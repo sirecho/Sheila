@@ -3,10 +3,11 @@
 #ifndef MINIMAX_H_
 #define MINIMAX_H_
 
-#include <vector>
-#include <climits>
-#include "piece.h"
 #include "movedecision.h"
+
+class Board;
+class Piece;
+class Position;
 
 class MiniMax : public MoveDecision {
 	public:

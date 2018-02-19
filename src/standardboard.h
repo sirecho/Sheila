@@ -10,9 +10,9 @@
 
 #include "board.h"
 #include "side.h"
-#include "position.h"
 
 class Piece;
+class Position;
 
 const int WHITE_OFFICER_ROW     =   0;
 const int WHITE_PAWN_ROW        =   1;

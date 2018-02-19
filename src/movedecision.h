@@ -8,7 +8,9 @@
 #ifndef MOVEDECISION_H_
 #define MOVEDECISION_H_
 
-#include "piece.h"
+class Board;
+class Piece;
+class Position;
 
 class MoveDecision {
 	public:
