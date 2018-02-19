@@ -14,8 +14,8 @@
 #include <algorithm>
 #include "standardboard.h"
 #include "piece.h"
-#include "IMoveDecision.h"
-#include "MiniMax.h"
+#include "movedecision.h"
+#include "minimax.h"
 
 using namespace std;
 

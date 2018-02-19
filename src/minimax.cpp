@@ -4,8 +4,7 @@
 #include <climits>
 #include "board.h"
 #include "piece.h"
-#include "IMoveDecision.h"
-#include "MiniMax.h"
+#include "minimax.h"
 
 int MiniMax::miniMaxShort(Board *board, int depth, int alpha, int beta, bool maxPlayer) {
 		if (depth == 0) return board->evaluate();

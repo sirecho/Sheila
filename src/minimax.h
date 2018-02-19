@@ -6,7 +6,7 @@
 #include <vector>
 #include <climits>
 #include "piece.h"
-#include "IMoveDecision.h"
+#include "movedecision.h"
 
 class MiniMax : public IMoveDecision {
 	public:
