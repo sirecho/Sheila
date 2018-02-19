@@ -14,7 +14,7 @@ class Position;
 
 class MoveDecision {
 	public:
-	virtual void getNextMove(Board *board, bool maxPlayer, Piece **pieceToMove, Position **moveTo) = 0;
+	virtual void getNextMove(Board& board, bool maxPlayer, Piece **pieceToMove, Position **moveTo) = 0;
 };
 
 #endif /* MOVEDECISION_H_ */

@@ -12,8 +12,8 @@ class Position;
 class MiniMax : public MoveDecision {
 	public:
 	MiniMax() {};
-	int miniMaxShort(Board *board, int depth, int alpha, int beta, bool maxPlayer);
-	void getNextMove(Board *board, bool maxPlayer, Piece **piece, Position **move);
+	int miniMaxShort(Board& board, int depth, int alpha, int beta, bool maxPlayer);
+	void getNextMove(Board& board, bool maxPlayer, Piece **piece, Position **move);
 };
 
 #endif /* MINIMAX_H_ */

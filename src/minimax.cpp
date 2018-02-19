@@ -6,11 +6,10 @@
 #include "piece.h"
 #include "minimax.h"
 
-int MiniMax::miniMaxShort(Board *board, int depth, int alpha, int beta, bool maxPlayer) {
-		if (depth == 0) return board->evaluate();
+int MiniMax::miniMaxShort(Board& board, int depth, int alpha, int beta, bool maxPlayer) {
+		if (depth == 0) return board.evaluate();
 
-		std::vector<Piece*> allPieces = board->pieces();
-		std::vector<Piece*> pieces = maxPlayer ? board->whitePieces() : board->blackPieces();
+		std::vector<Piece*> pieces = maxPlayer ? board.whitePieces() : board.blackPieces();
 
 		int bestValue = maxPlayer ? INT_MIN : INT_MAX;
 
@@ -23,7 +22,7 @@ int MiniMax::miniMaxShort(Board *board, int depth, int alpha, int beta, bool max
 
 			for(std::vector<Position>::iterator jt = moves.begin(); jt != moves.end(); ++jt) {
 				Position newPosition = *jt;
-				Piece* capture = board->pieceAt(newPosition);
+				Piece* capture = board.pieceAt(newPosition);
 
 				p->move(board, *jt);
 				int value = miniMaxShort(board, depth-1, alpha, beta, !maxPlayer);
@@ -38,8 +37,8 @@ int MiniMax::miniMaxShort(Board *board, int depth, int alpha, int beta, bool max
 
 				// Revert to previous state
 				p->placeAt(prevPosition);
-				board->placePiece(prevPosition, p);
-				board->placePiece(newPosition, capture);
+				board.placePiece(prevPosition, p);
+				board.placePiece(newPosition, capture);
 
 				if (beta <= alpha) break;
 			}
@@ -49,9 +48,9 @@ int MiniMax::miniMaxShort(Board *board, int depth, int alpha, int beta, bool max
 		return bestValue;
 	}
 
-	void MiniMax::getNextMove(Board *board, bool maxPlayer, Piece **piece, Position **move) {
-		std::vector<Piece*> allPieces = board->pieces();
-		std::vector<Piece*> pieces = maxPlayer ? board->whitePieces() : board->blackPieces();
+	void MiniMax::getNextMove(Board& board, bool maxPlayer, Piece **piece, Position **move) {
+		std::vector<Piece*> allPieces = board.pieces();
+		std::vector<Piece*> pieces = maxPlayer ? board.whitePieces() : board.blackPieces();
 
 		if (maxPlayer) {
 			int bestValue = INT_MIN;
@@ -66,7 +65,7 @@ int MiniMax::miniMaxShort(Board *board, int depth, int alpha, int beta, bool max
 			    for(std::vector<Position>::iterator jt = moves.begin(); jt != moves.end(); ++jt) {
 
 			    	Position newPosition = *jt;
-					Piece* capture = board->pieceAt(newPosition);
+					Piece* capture = board.pieceAt(newPosition);
 
 			    	p->move(board, *jt);
 			    	int value = miniMaxShort(board, 3, INT_MIN, INT_MAX, false);
@@ -74,17 +73,18 @@ int MiniMax::miniMaxShort(Board *board, int depth, int alpha, int beta, bool max
 			    	if (value > bestValue) {
 			    		bestValue = value;
 			    		*piece = p;
+			    		delete *move;
 			    		*move = new Position((*jt).letter(), (*jt).number());
 			    	}
 
 			    	// Revert to previous state
 			    	p->placeAt(prevPosition);
-			    	board->placePiece(prevPosition, p);
-			    	board->placePiece(newPosition, capture);
+			    	board.placePiece(prevPosition, p);
+			    	board.placePiece(newPosition, capture);
 			    }
 			}
 
-			board->placePieces(allPieces);
+			board.placePieces(allPieces);
 		} else {
 			int bestValue = INT_MAX;
 
@@ -98,7 +98,7 @@ int MiniMax::miniMaxShort(Board *board, int depth, int alpha, int beta, bool max
 			    for(std::vector<Position>::iterator jt = moves.begin(); jt != moves.end(); ++jt) {
 
 			    	Position newPosition = *jt;
-					Piece* capture = board->pieceAt(newPosition);
+					Piece* capture = board.pieceAt(newPosition);
 
 					p->move(board, *jt);
 			    	int value = miniMaxShort(board, 3, INT_MIN, INT_MAX, true);
@@ -106,16 +106,17 @@ int MiniMax::miniMaxShort(Board *board, int depth, int alpha, int beta, bool max
 			    	if (value < bestValue) {
 			    		bestValue = value;
 			    		*piece = p;
+			    		delete *move;
 			    		*move = new Position((*jt).letter(), (*jt).number());
 			    	}
 
 			    	// Revert to previous state
 			    	p->placeAt(prevPosition);
-			    	board->placePiece(prevPosition, p);
-			    	board->placePiece(newPosition, capture);
+			    	board.placePiece(prevPosition, p);
+			    	board.placePiece(newPosition, capture);
 			    }
 			}
 
-			board->placePieces(allPieces);
+			board.placePieces(allPieces);
 		}
 	}

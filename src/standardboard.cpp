@@ -16,8 +16,12 @@ StandardBoard::StandardBoard() {
 
 	// Allocate memory for the board
 	board_ = new Piece**[height_];
-	for (int i=0; i<width_; i++)
+	for (int i = 0; i < height_; i++) {
 		board_[i] = new Piece*[width_];
+		for (int j = 0; j < width_; j++) {
+			board_[i][j] = NULL;
+		}
+	}
 
 	// Initialize white pieces
     board_[0][0] = new Rook    (WHITE, Position(0,0));
@@ -54,6 +58,18 @@ StandardBoard::StandardBoard() {
     board_[6][5] = new Pawn    (BLACK, Position(5,6));
     board_[6][6] = new Pawn    (BLACK, Position(6,6));
     board_[6][7] = new Pawn    (BLACK, Position(7,6));
+}
+
+StandardBoard::~StandardBoard() {
+
+	for(int i = 0; i < height_; i++) {
+		for(int j = 0; j < width_; j++) {
+			delete board_[i][j];
+		}
+		delete[] board_[i];
+	}
+
+	delete[] board_;
 }
 
 void StandardBoard::clear() {
@@ -257,7 +273,9 @@ void StandardBoard::draw() {
 	}
 	std::cout << "    A   B   C   D   E   F   G   H" << std::endl;
 
-	std::cout << "\nThe EPD representation if this board is " << Describe() << std::endl;
+	char* epd = Describe();
+	std::cout << "\nThe EPD representation if this board is " << epd << std::endl;
+	delete[] epd;
 }
 
 int StandardBoard::width() {

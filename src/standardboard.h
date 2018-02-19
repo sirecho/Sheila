@@ -24,6 +24,7 @@ const int BLACK_ENPASSANT_ROW   =   4;
 class StandardBoard : public Board {
   public:
     StandardBoard();
+    ~StandardBoard();
 
     // Functions for placing and removing pieces on the board
     void placeAllPieces(Piece ***newBoard);

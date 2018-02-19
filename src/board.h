@@ -18,6 +18,8 @@ class Board {
 
   public:
 
+    virtual ~Board() {}
+
     // Functions for placing and removing pieces on the board
     virtual void placeAllPieces(Piece ***newBoard) = 0;
     virtual void placePieces(std::vector<Piece*> pieces) = 0;
