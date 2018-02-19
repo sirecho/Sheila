@@ -2,7 +2,7 @@
  * side.h
  *
  *  Created on: Mar 5, 2016
- *      Author: echo
+ *      Author: Eirik Skogstad
  */
 
 #ifndef SIDE_H_
