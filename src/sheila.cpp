@@ -8,14 +8,14 @@
 
 #include <iostream>
 #include <ctime>
-#include "standardboard.h"
+#include "standardchessboard.h"
 #include "piece.h"
 #include "minimax.h"
 
 using namespace std;
 
 void autoPlay(int moves) {
-	StandardBoard board;
+	StandardChessBoard board;
 	MiniMax moveDecision;
 
 	board.draw();
@@ -41,7 +41,7 @@ void autoPlay(int moves) {
 		maxPlayer = !maxPlayer;
 	}
 
-	// *piece is deleted in StandardBoard dtor
+	// *piece is deleted in StandardChessBoard dtor
 	delete piece;
 	delete *move;
 	delete move;

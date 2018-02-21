@@ -16,11 +16,6 @@ Piece::Piece(Side side, Position position) {
 }
 
 void Piece::move(Board& board, Position to) {
-
-    if (board.pieceAt(to) != NULL) {
-        board.capturePiece(to);
-    }
-
     board.movePiece(position_, to);
     position_ = to;
 }
@@ -211,19 +206,6 @@ std::vector<Position> Pawn::getLegalMoves(Board& board) {
 }
 
 void Pawn::move(Board& board, Position to) {
-    Position capture = to;
-
-    // Handle capture
-    if (to.letter() != position_.letter()) {
-
-        // En passant
-        if (board.pieceAt(to) == NULL) {
-            capture = side_ == WHITE ? to.stepSouth() : to.stepNorth();
-        }
-
-        board.capturePiece(capture);
-    }
-
     // Set en passant
     // if (abs(to.number - position_.number) == 2) {
     //     int enPassantRow = (position_.number - to.number) / 2;

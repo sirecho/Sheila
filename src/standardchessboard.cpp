@@ -8,11 +8,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
-#include "standardboard.h"
+#include "standardchessboard.h"
 #include "piece.h"
 #include "position.h"
 
-StandardBoard::StandardBoard() {
+StandardChessBoard::StandardChessBoard() {
 
 	// Allocate memory for the board
 	board_ = new Piece**[height_];
@@ -60,7 +60,7 @@ StandardBoard::StandardBoard() {
     board_[6][7] = new Pawn    (BLACK, Position(7,6));
 }
 
-StandardBoard::~StandardBoard() {
+StandardChessBoard::~StandardChessBoard() {
 
 	for(int i = 0; i < height_; i++) {
 		for(int j = 0; j < width_; j++) {
@@ -72,7 +72,7 @@ StandardBoard::~StandardBoard() {
 	delete[] board_;
 }
 
-void StandardBoard::clear() {
+void StandardChessBoard::clear() {
 	for (int i = 0; i < height_; i++) {
 		for (int j = 0; j < width_; j++) {
 			board_[i][j] = NULL;
@@ -80,7 +80,7 @@ void StandardBoard::clear() {
 	}
 }
 
-std::vector<Piece*> StandardBoard::pieces() {
+std::vector<Piece*> StandardChessBoard::pieces() {
 	std::vector<Piece*> pieces;
 	for (int i = 0; i < height_; i++) {
 		for (int j = 0; j < width_; j++) {
@@ -92,22 +92,18 @@ std::vector<Piece*> StandardBoard::pieces() {
 	return pieces;
 }
 
-void StandardBoard::placeAllPieces(Piece ***newBoard) { 
-	board_ = newBoard; 
-}
-
-void StandardBoard::placePieces(std::vector<Piece*> pieces) {
+void StandardChessBoard::placePieces(std::vector<Piece*> pieces) {
 	for(std::vector<Piece*>::iterator it = pieces.begin(); it != pieces.end(); ++it) {
 		Piece *p = *it;
 		board_[p->position().number()][p->position().letter()] = p;
 	}
 }
 
-void StandardBoard::placePiece(Position pos, Piece* piece) {
+void StandardChessBoard::placePiece(Position pos, Piece* piece) {
 	board_[pos.number()][pos.letter()] = piece;
 }
 
-int StandardBoard::evaluate() {
+int StandardChessBoard::evaluate() {
 	int whitePiecePoints = 0;
 	int blackPiecePoints = 0;
 	int whiteSquarePoints = 0;
@@ -131,7 +127,7 @@ int StandardBoard::evaluate() {
 	return (whitePiecePoints - blackPiecePoints) + (whiteSquarePoints - blackSquarePoints);
 }
 
-bool StandardBoard::isOutOfBounds(Position position) {
+bool StandardChessBoard::isOutOfBounds(Position position) {
 	bool a = position.number() < height_;
 	bool b = position.letter() < width_;
 	bool c = position.number() >= 0;
@@ -139,15 +135,15 @@ bool StandardBoard::isOutOfBounds(Position position) {
 	return !( a && b && c && d );
 }
 
-bool StandardBoard::isWhitePawnRow(Position position) {
+bool StandardChessBoard::isWhitePawnRow(Position position) {
 	return position.number() == WHITE_PAWN_ROW;
 }
 
-bool StandardBoard::isBlackPawnRow(Position position) {
+bool StandardChessBoard::isBlackPawnRow(Position position) {
 	return position.number() == BLACK_PAWN_ROW;
 }
 
-std::vector<Piece*> StandardBoard::pieces(Side side) {
+std::vector<Piece*> StandardChessBoard::pieces(Side side) {
 
 	std::vector<Piece*> pieces;
 	for (int i=0; i<height_; i++) {
@@ -161,40 +157,30 @@ std::vector<Piece*> StandardBoard::pieces(Side side) {
 	return pieces;
 }
 
-std::vector<Piece*> StandardBoard::whitePieces() {
-	return pieces(WHITE);
-}
-
-std::vector<Piece*> StandardBoard::blackPieces() {
-	return pieces(BLACK);
-}
-
-Piece *StandardBoard::pieceAt(Position position) {
+Piece *StandardChessBoard::pieceAt(Position position) {
 	if (!isOutOfBounds(position))
 		return board_[position.number()][position.letter()];
 
 	return NULL;
 }
 
-
-void StandardBoard::capturePiece(Position position) {
-	board_[position.number()][position.letter()] = NULL;
-}
-
-void StandardBoard::movePiece(Position from, Position to) {
+Piece* StandardChessBoard::movePiece(Position from, Position to) {
     // TODO: Check outofbounds
 	Piece *moved = board_[from.number()][from.letter()];
+	Piece *capture = board_[to.number()][to.letter()];
 	board_[from.number()][from.letter()] = NULL;
 	board_[to.number()][to.letter()] = moved;
 
 	next_to_move_ = next_to_move_ == WHITE ? BLACK : WHITE;
+
+	return capture;
 }
 
-Position* StandardBoard::getEnPassantPosition() { 
+Position* StandardChessBoard::getEnPassantPosition() { 
 	return 0; 
 }
 
-char* StandardBoard::Describe() {
+char* StandardChessBoard::Describe() {
     char* epd_string = new char[128];
     int string_position = 0;
     char separator = '/';
@@ -248,7 +234,7 @@ char* StandardBoard::Describe() {
     return epd_string;
 }
 
-void StandardBoard::draw() {
+void StandardChessBoard::draw() {
 
 	std::cout << "   ";
 	for (int j=0; j<width_*4-1; j++) {
@@ -278,6 +264,6 @@ void StandardBoard::draw() {
 	delete[] epd;
 }
 
-int StandardBoard::width() {
+int StandardChessBoard::width() {
 	return width_;
 }

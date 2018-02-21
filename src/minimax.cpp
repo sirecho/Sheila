@@ -9,7 +9,7 @@
 int MiniMax::miniMaxShort(Board& board, int depth, int alpha, int beta, bool maxPlayer) {
 		if (depth == 0) return board.evaluate();
 
-		std::vector<Piece*> pieces = maxPlayer ? board.whitePieces() : board.blackPieces();
+		std::vector<Piece*> pieces = maxPlayer ? board.pieces(WHITE) : board.pieces(BLACK);
 
 		int bestValue = maxPlayer ? INT_MIN : INT_MAX;
 
@@ -50,7 +50,7 @@ int MiniMax::miniMaxShort(Board& board, int depth, int alpha, int beta, bool max
 
 	void MiniMax::getNextMove(Board& board, bool maxPlayer, Piece **piece, Position **move) {
 		std::vector<Piece*> allPieces = board.pieces();
-		std::vector<Piece*> pieces = maxPlayer ? board.whitePieces() : board.blackPieces();
+		std::vector<Piece*> pieces = maxPlayer ? board.pieces(WHITE) : board.pieces(BLACK);
 
 		if (maxPlayer) {
 			int bestValue = INT_MIN;

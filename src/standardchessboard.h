@@ -1,12 +1,12 @@
 /*
- * standardboard.h
+ * standardchessboard.h
  *
  *  Created on: Dec 21, 2015
  *      Author: Eirik Skogstad
  */
 
-#ifndef STANDARDBOARD_H_
-#define STANDARDBOARD_H_
+#ifndef STANDARDCHESSBOARD_H_
+#define STANDARDCHESSBOARD_H_
 
 #include "board.h"
 #include "side.h"
@@ -21,13 +21,12 @@ const int BLACK_OFFICER_ROW     =   7;
 const int BLACK_PAWN_ROW        =   6;
 const int BLACK_ENPASSANT_ROW   =   4;
 
-class StandardBoard : public Board {
+class StandardChessBoard : public Board {
   public:
-    StandardBoard();
-    ~StandardBoard();
+    StandardChessBoard();
+    ~StandardChessBoard();
 
     // Functions for placing and removing pieces on the board
-    void placeAllPieces(Piece ***newBoard);
     void placePieces(std::vector<Piece*> pieces);
     void placePiece(Position pos, Piece* piece);
     void clear();
@@ -36,8 +35,6 @@ class StandardBoard : public Board {
     Piece *pieceAt(Position position);
     std::vector<Piece*> pieces();
     std::vector<Piece*> pieces(Side side);
-    std::vector<Piece*> whitePieces();
-    std::vector<Piece*> blackPieces();
 
     // Evaluate the current advantage for the white player.
     // In chess terms, this is the evaluation of the position boiled down to a
@@ -45,8 +42,7 @@ class StandardBoard : public Board {
     // A higher value signifies more advantage for white and vice versa.
     int evaluate();
 
-    void capturePiece(Position position);
-    void movePiece(Position from, Position to);
+    Piece* movePiece(Position from, Position to);
 
     Position* getEnPassantPosition();
 
@@ -75,4 +71,4 @@ class StandardBoard : public Board {
     Side next_to_move_ = WHITE;
 };
 
-#endif /* STANDARDBOARD_H_ */
+#endif /* STANDARDCHESSBOARD_H_ */
