@@ -55,8 +55,7 @@ class StandardChessBoard : public Board {
     int width();
 
     bool isOutOfBounds(Position position);
-    bool isWhitePawnRow(Position position);
-    bool isBlackPawnRow(Position position);
+    bool isPawnRow(Side side, Position position);
 
   private:
     static const int height_ = 8;

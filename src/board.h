@@ -41,10 +41,9 @@ class Board {
     virtual int width() = 0;
     virtual bool isOutOfBounds(Position position) = 0;
 
-    
+
     virtual Position* getEnPassantPosition() = 0;
-    virtual bool isWhitePawnRow(Position position) = 0;
-    virtual bool isBlackPawnRow(Position position) = 0;
+    virtual bool isPawnRow(Side side, Position position) = 0;
 
     // Return a string representation of the current position
     virtual char* Describe() = 0;

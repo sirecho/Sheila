@@ -135,12 +135,9 @@ bool StandardChessBoard::isOutOfBounds(Position position) {
 	return !( a && b && c && d );
 }
 
-bool StandardChessBoard::isWhitePawnRow(Position position) {
-	return position.number() == WHITE_PAWN_ROW;
-}
-
-bool StandardChessBoard::isBlackPawnRow(Position position) {
-	return position.number() == BLACK_PAWN_ROW;
+bool StandardChessBoard::isPawnRow(Side side, Position position) {
+	int pawnRow = side == WHITE ? WHITE_PAWN_ROW : BLACK_PAWN_ROW;
+	return position.number() == pawnRow;
 }
 
 std::vector<Piece*> StandardChessBoard::pieces(Side side) {

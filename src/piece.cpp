@@ -171,9 +171,9 @@ std::vector<Position> Pawn::getLegalMoves(Board& board) {
     }
 
     // May advance to D if this is the first move
-    if (this->side_ == WHITE && board.isWhitePawnRow(position_) && board.pieceAt(position_.stepNorth(2)) == NULL && squareBPiece == NULL) {
+    if (this->side_ == WHITE && board.isPawnRow(side_, position_) && board.pieceAt(position_.stepNorth(2)) == NULL && squareBPiece == NULL) {
         moves.push_back(position_.stepNorth().stepNorth());
-    } else if (this->side_ == BLACK && board.isBlackPawnRow(position_) && board.pieceAt(position_.stepSouth(2)) == NULL && squareBPiece == NULL) {
+    } else if (this->side_ == BLACK && board.isPawnRow(side_, position_) && board.pieceAt(position_.stepSouth(2)) == NULL && squareBPiece == NULL) {
         moves.push_back(position_.stepSouth().stepSouth());
     }
 
